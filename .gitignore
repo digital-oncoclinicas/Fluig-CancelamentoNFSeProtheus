@@ -1,0 +1,22 @@
+# Arquivos do Eclipse/Fluig IDE
+.metadata/
+.plugins/
+.settings/
+*.log
+
+# Arquivos temporários
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+
+# Diretórios de outros projetos (para evitar inclusão acidental)
+../*/
+
+# Arquivos de configuração local
+config/local/

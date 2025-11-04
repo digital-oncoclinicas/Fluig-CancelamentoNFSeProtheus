@@ -1,0 +1,382 @@
+<html>
+
+<head>
+    <link type="text/css" rel="stylesheet" href="/portal/resources/style-guide/css/fluig-style-guide.min.css" />
+    <script type="text/javascript" src="/portal/resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="/portal/resources/js/jquery/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/portal/resources/js/mustache/mustache-min.js"></script>
+    <script type="text/javascript" src="/portal/resources/style-guide/js/fluig-style-guide.min.js" charset="utf-8"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script type="text/javascript" src="/util/resources/js/Utils.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="/webdesk/vcXMLRPC.js"></script>
+    <script type="text/javascript" src="/SistemaChamados/resources/js/util/getParamsUrl.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <style type="text/css">
+        .form-group {
+            margin-left: 0px;
+        }
+        
+        .DivTipoTitulo {
+            align-items: center;
+        }
+        
+        select[readonly] {
+            background: #eee;
+            pointer-events: none;
+            touch-action: none;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="fluig-style-guide">
+        <form name="form" role="form">
+
+            <input type="hidden" name="cpStatusNfAux" id="cpStatusNfAux">
+            <input type="hidden" name="cpStatusNf" id="cpStatusNf">
+            <input type="hidden" name="cpTipoNotaAux" id="cpTipoNotaAux">
+            <input type="hidden" name="emailSolicitante" id="emailSolicitante">
+            <input type="hidden" name="idSolicitante" id="idSolicitante"> 
+            <input type="hidden" name="cpTipoTitulo" id="cpTipoTitulo">
+            <input type="hidden" name="cpNumeSerie" id="cpNumeSerie">
+            <input type="hidden" name="cpCodFiliais" id="cpCodFiliais">
+            <input type="hidden" name="cpDescFiliais" id="cpDescFiliais">
+            <input type="hidden" name="aprovacaoAux" id="aprovacaoAux">
+            <input type="hidden" name="tipoBusca" id="tipoBusca" value="Nf_eletronica">
+            <input type="hidden" name="cpDias" id="cpDias">
+            <input type="hidden" name="aprovacaoFiscal" id="aprovacaoFiscal">      
+            <input type="hidden" name="atividadeAtual" id="atividadeAtual">     
+            <input type="hidden" name="novaAtividade" id="novaAtividade">   
+            
+            <div class="container">
+                <br>
+                <div id="div_solicitante" name="div_solicitante">
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="nomeSolicitante" class="required text-info">Solicitante </label>
+                            <input type="text" class="form-control" id="nomeSolicitante" name="nomeSolicitante" readonly="">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="required text-info">Número Solicitação </label>
+                            <input type="text" name="cpNumeroSolicitacao" id="cpNumeroSolicitacao" class="form-control" readonly="">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="required text-info">Data Solicitação </label>
+                            <input type="text" name="dataSolicitacao" id="dataSolicitacao" class="form-control" readonly="">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label class="labelField obrigatorio">Filial</label>
+                                <input type="zoom" id="cpFilial" name="cpFilial" data-zoom="
+								{
+									'displayKey':'FILTRO',
+									'datasetId':'ds_filiais',
+									'maximumSelectionLength':'1',
+									'placeholder':'Escolha...',
+									'fields':[
+										{'field':'CODIGO','label':'Codigo'},
+										{'field':'DESCRICAO','label':'Filial','standard':'true'},
+										{'field':'CGC','label':'CGC'},
+										{'field':'ID_GESTOR','label':'ID_GESTOR','visible': 'false'},										
+										{'field':'CODIGO_FLUIG','label':'CODIGO_FLUIG','visible': 'false'},
+										{'field':'RAZAO_SOCIAL','label':'RAZAO_SOCIAL','visible': 'false'},
+										{'field':'ENDERECO','label':'ENDERECO','visible': 'false'},
+										{'field':'COMPLEMENTO','label':'COMPLEMENTO','visible': 'false'},
+										{'field':'CEP','label':'CEP','visible': 'false'},
+										{'field':'BAIRRO','label':'BAIRRO','visible': 'false'},
+										{'field':'CIDADE','label':'CIDADE','visible': 'false'},
+										{'field':'ESTADO','label':'ESTADO','visible': 'false'},
+										{'field':'CLASSIFICAÇÃO','label':'CLASSIFICAÇÃO','visible': 'false'}
+										]}"/>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label class="labelField text-info">NF Eletrônica?</label>
+                            <input name="swTipoBusca" id="swTipoBusca" type="checkbox" data-on-value="titulo" data-on-text="Não" data-off-text="Sim" data-on-color="info" data-off-value="Nf_eletronica">
+
+                        </div>
+                        <div class="col-md-3 cpNumBusca">
+                            <div class="form-group">
+                                <label class="required text-info">Número</label>
+                                <input type="text" class="form-control" name="cpNumBusca" id="cpNumBusca">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="buscar required text-info">Buscar</label>
+                                <div class="input-group">
+                                    <button type="button" id="btnBuscaNf" class="btn btn-primary btnBuscaNf" title="Buscar" onclick="buscaNfProtheus()" name="btnBuscaNf" value="Buscar">Buscar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <label class="required text-info">Número Título</label>
+                            <input type="text" name="cpNumeroNota" id="cpNumeroNota" class="form-control" readonly="">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="required text-info">NF eletrônica</label>
+                            <input type="text" name="cpNumeroNFEletronica" id="cpNumeroNFEletronica" class="form-control" readonly="">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <label class="required text-info">Data de Emissão</label>
+                            <input type="text" name="cpDataEmissao" id="cpDataEmissao" class="form-control" readonly="">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="required text-info">CNPJ do Cliente</label>
+                            <input type="text" name="cpCnpjCliente" id="cpCnpjCliente" class="form-control" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <span class="required text-info">
+                                <label for="cpRazaoSocial">Razão Social</label>
+                            </span>
+                            <input type="text" class="form-control" name="cpRazaoSocial" id="cpRazaoSocial" readonly="">
+                        </div>
+                        <div class="col-md-6">
+                            <span class="required text-info">
+                                <label for="cpValorNf" align="left">Valor na NF</label>
+                            </span>
+                            <input type="text" class="form-control" name="cpValorNf" id="cpValorNf" readonly="">
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <span class="required text-info">
+                                <label for="cpMotivo">Motivo Cancelamento</label>
+                            </span>
+                            <select name="cpMotivoCanc" id="cpMotivoCanc" class="form-control">
+                                <option value="Duplicidade">Duplicidade</option>
+                                <option value="Erro na retenção dos impostos">Erro na retenção dos impostos</option>
+                                <option value="Outros">Outros</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="required text-info">Tipo da Nota</label>
+                            <input type="text" id="cpTipoNota" name="cpTipoNota" class="form-control" readonly="">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-4">
+                            <label class="required text-info">Status da Nota</label>
+                            <input type="text" id="cpMensagemProtheus" name="cpMensagemProtheus" class="form-control" readonly="">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="required text-info">Status Título</label>
+                            <select id="selectStatusTitulo" name="selectStatusTitulo" class="form-control" onchange="statusTitulo(this)">
+                                <option value=""></option>
+                                <option value="aberto">Aberto</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="required text-info">Tipo Cancelamento</label>
+                            <select id="selectTipoCancelamento" name="selectTipoCancelamento" class="form-control">
+                                <option value=""></option>
+                                <option value="extemporaneo">Extemporaneo</option>
+                                <option value="normal">Normal</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="alert alert-success hide DivTipoTitulo" role="alert" id="DivTipoTitulo" align="center">
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-12">
+                            <span class="required text-info">
+                                <label for="cpObservacao">Observações</label>
+                            </span>
+                            <textarea class="form-control" name="cpObservacao" id="cpObservacao" rows="10" cols="10"></textarea>
+                        </div>
+                    </div>
+                    
+                   <!-- <fieldset id="aprovacaoFiscal" style="display: none">
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <span class="required text-info">
+                                    <label for="responsavelAprovFiscal">Responsavel</label>
+                                </span>
+                                <input type="text" class="form-control" name="responsavelAprovFiscal" id="responsavelAprovFiscal" readonly>
+                            </div>
+                            <div class="col-md-3">
+                                <span class="required text-info">
+                                    <label for="dataAconpanhamentoFiscal" align="left">Data Análise</label>
+                                </span>
+                                <input type="date" class="form-control" name="dataAprovFiscal" id="dataAprovFiscal" readonly>
+                            </div>
+                            <div class="form-group col-md-4" id="divAprovacaoFiscal" style="padding-top: 1em">
+                                <label for="aprovacao" class="required">Aprovação</label>
+                                <button onclick="startBtn(this.id)" type="button" class="btn btn-success" id="AprovFiscal">
+                                    <span class="fluigicon fluigicon-thumbs-up fluigicon-md Aprov"
+                                        style="display: none;"></span>
+                                    Aprovar
+                                </button>
+                                <button onclick="startBtn(this.id)" type="button" class="btn btn-danger" id="ReprovFiscal">
+                                    <span class="fluigicon fluigicon-thumbs-down fluigicon-md Reprov"
+                                        style="display: none;"></span>
+                                    Reprovar
+                                </button>
+
+                            </div>
+                        </div>
+                        <legend>Análise</legend>
+                        <div class="row form-group">
+                            <div class="col-md-12">
+                                <span class="required text-info">
+                                    <label for="consideracoesFiscal">Considerações</label>
+                                </span>
+                                <textarea class="form-control" name="consideracoesFiscal" id="consideracoesFiscal" rows="10" cols="10"></textarea>
+                            </div>
+                        </div>
+                    </fieldset> -->
+
+                    <fieldset id="aprovacao" style="display: none">
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <span class="required text-info">
+                                    <label for="responsavelAconpanhamento">Responsavel</label>
+                                </span>
+                                <input type="text" class="form-control" name="responsavelAprov" id="responsavelAprov" readonly>
+                            </div>
+                            <div class="col-md-3">
+                                <span class="required text-info">
+                                    <label for="dataAconpanhamento" align="left">Data Análise</label>
+                                </span>
+                                <input type="date" class="form-control" name="dataAprov" id="dataAprov" readonly>
+                            </div>
+                            <div class="form-group col-md-4" id="divAprovacao" style="padding-top: 1em">
+                                <label for="aprovacao" class="required">Aprovação</label>
+                                <button onclick="startBtn(this.id)" type="button" class="btn btn-success" id="Aprov">
+                                    <span class="fluigicon fluigicon-thumbs-up fluigicon-md Aprov"
+                                        style="display: none;"></span>
+                                    Aprovar
+                                </button>
+                                <button onclick="startBtn(this.id)" type="button" class="btn btn-danger" id="Reprov">
+                                    <span class="fluigicon fluigicon-thumbs-down fluigicon-md Reprov"
+                                        style="display: none;"></span>
+                                    Reprovar
+                                </button>
+
+                            </div>
+                        </div>
+                        <legend>Análise Financeiro</legend>
+                        <div class="row form-group">
+                            <div class="col-md-12">
+                                <span class="required text-info">
+                                    <label for="consideracoesAconpanhamento">Considerações</label>
+                                </span>
+                                <textarea class="form-control" name="consideracoesAconpanhamento" id="consideracoesAconpanhamento" rows="10" cols="10"></textarea>
+                            </div>
+                        </div>
+                    </fieldset>
+                    
+                    <fieldset id="aprovacao_fiscal" style="display: none">
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <span class="required text-info">
+                                    <label for="responsavelAconpanhamento_fiscal">Responsavel</label>
+                                </span>
+                                <input type="text" class="form-control" name="responsavelAprov_fiscal" id="responsavelAprov_fiscal" readonly>
+                            </div>
+                            <div class="col-md-3">
+                                <span class="required text-info">
+                                    <label for="dataAconpanhamento_fiscal" align="left">Data Análise</label>
+                                </span>
+                                <input type="date" class="form-control" name="dataAprov_fiscal" id="dataAprov_fiscal" readonly>
+                            </div>
+                            <div class="form-group col-md-4" id="divAprovacao_fiscal" style="padding-top: 1em">
+                                <label for="aprovacao_1" class="required">Aprovação</label>
+                                <button onclick="startBtn(this.id)" type="button" class="btn btn-success" id="Aprov_fiscal">
+                                    <span class="fluigicon fluigicon-thumbs-up fluigicon-md Aprov"
+                                        style="display: none;"></span>
+                                    Aprovar
+                                </button>
+                                <button onclick="startBtn(this.id)" type="button" class="btn btn-danger" id="Reprov_fiscal">
+                                    <span class="fluigicon fluigicon-thumbs-down fluigicon-md Reprov"
+                                        style="display: none;"></span>
+                                    Reprovar
+                                </button>
+
+                            </div>
+                        </div>
+                        <legend>Análise</legend>
+                        <div class="row form-group">
+                            <div class="col-md-12">
+                                <span class="required text-info">
+                                    <label for="consideracoes_fiscal">Considerações</label>
+                                </span>
+                                <textarea class="form-control" name="consideracoes_fiscal" id="consideracoes_fiscal" rows="10" cols="10"></textarea>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset id="aprovacao_fiscal2" style="display: none">
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <span class="required text-info">
+                                    <label for="responsavelAprov_fiscal2">Responsavel</label>
+                                </span>
+                                <input type="text" class="form-control" name="responsavelAprov_fiscal2" id="responsavelAprov_fiscal2" readonly>
+                            </div>
+                            <div class="col-md-3">
+                                <span class="required text-info">
+                                    <label for="dataAprov_fiscal2" align="left">Data Análise</label>
+                                </span>
+                                <input type="date" class="form-control" name="dataAprov_fiscal2" id="dataAprov_fiscal2" readonly>
+                            </div>
+                            <div class="form-group col-md-4" id="divAprovacao_fiscal2" style="padding-top: 1em">
+                                <label for="aprovacao_2" class="required">Aprovação</label>
+                                <select name="aprovacao_2" id="aprovacao_2" class="form-control">
+                                    <option value=""></option>
+                                    <option value="solicitarCorrecao">Solicitar Correção</option>
+                                    <option value="envioFaturamento">Envio Faturamento</option>
+                                    <option value="finalizado">Finalizado</option>
+                                </select>
+                            </div>
+                        </div>
+                        <legend>Análise</legend>
+                        <div class="row form-group">
+                            <div class="col-md-12">
+                                <span class="required text-info">
+                                    <label for="consideracoes_fiscal2">Considerações</label>
+                                </span>
+                                <textarea class="form-control" name="consideracoes_fiscal2" id="consideracoes_fiscal2" rows="10" cols="10"></textarea>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                </div>
+            </div>
+            <br>
+            <br>
+
+            <div>
+                <input type="hidden" name="COD_SOLICITACAO" id="COD_SOLICITACAO">
+                <input type="hidden" name="VERSAO" id="VERSAO">
+                <input type="hidden" name="ISDEFAULT" id="ISDEFAULT">
+                <input type="hidden" name="SLA18" id="SLA18" />
+                <input type="hidden" name="SLA24" id="SLA24" />
+                <input type="hidden" name="SLA42" id="SLA42" />
+                <input type="hidden" name="SLA34" id="SLA34" />
+                <input type="hidden" name="SLA57" id="SLA57" />
+                <input type="hidden" name="SLA69" id="SLA69" />
+                <input type="hidden" name="SLA76" id="SLA76" />
+                <input type="hidden" name="SLA71" id="SLA71" />
+                <input type="hidden" name="SLA_TOTAL" id="SLA_TOTAL" />
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>
